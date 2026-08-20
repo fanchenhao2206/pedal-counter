@@ -1,0 +1,4 @@
+(fp_lib_table
+	(version 7)
+	(lib (name "pedal_counter") (type "KiCad") (uri "${KIPRJMOD}/pedal_counter.pretty") (options "") (descr ""))
+)
