@@ -2250,6 +2250,12 @@
 		(uuid "539e6f70-c593-434e-a9d3-43f1c8d18c29")
 	)
 	(junction
+		(at 85.09 85.09)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "a66f9054-f1db-42fe-8fb7-d1ccfc3a0565")
+	)
+	(junction
 		(at 187.96 74.93)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2509,7 +2515,17 @@
 	)
 	(wire
 		(pts
-			(xy 83.82 85.09) (xy 74.93 85.09)
+			(xy 85.09 72.39) (xy 85.09 69.85)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "940742df-5b0d-4e23-8638-c506bc5d4cd0")
+	)
+	(wire
+		(pts
+			(xy 87.63 85.09) (xy 85.09 85.09)
 		)
 		(stroke
 			(width 0)
@@ -2559,6 +2575,16 @@
 	)
 	(wire
 		(pts
+			(xy 85.09 85.09) (xy 74.93 85.09)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cb3556db-68c8-452e-9ec3-686d3efbadb4")
+	)
+	(wire
+		(pts
 			(xy 76.2 109.22) (xy 76.2 114.3)
 		)
 		(stroke
@@ -2586,6 +2612,16 @@
 			(type default)
 		)
 		(uuid "e8793791-7ff4-4e3d-9aab-8ba41b12cfbf")
+	)
+	(wire
+		(pts
+			(xy 85.09 80.01) (xy 85.09 85.09)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f42e6465-c553-4106-891b-70067c15d9c3")
 	)
 	(global_label "SW_SPDT"
 		(shape output)
@@ -2997,7 +3033,7 @@
 	)
 	(global_label "3.5MM_TRS_TIP"
 		(shape output)
-		(at 83.82 85.09 0)
+		(at 87.63 85.09 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -3007,7 +3043,7 @@
 		)
 		(uuid "f5288bc8-9c75-4b20-98ef-d7fb3824cfd3")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 100.9565 85.09 0)
+			(at 104.7665 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3821,6 +3857,166 @@
 			(project "pedal-counter"
 				(path "/97db42fc-d935-4d5d-82a6-1327e6a1cdb5"
 					(reference "SW4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3.3V")
+		(at 85.09 69.85 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "610f5c3c-b829-483e-8958-e785c6a9a96a")
+		(property "Reference" "#PWR018"
+			(at 85.09 73.66 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+3.3V"
+			(at 85.09 64.77 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 85.09 69.85 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 85.09 69.85 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
+			(at 85.09 69.85 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "b817a920-9668-4a95-8d6e-28a0458895ea")
+		)
+		(instances
+			(project "pedal-counter"
+				(path "/97db42fc-d935-4d5d-82a6-1327e6a1cdb5"
+					(reference "#PWR018")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_US")
+		(at 85.09 76.2 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "65517ae0-b568-44bd-94c4-2e89e4d52b04")
+		(property "Reference" "R7"
+			(at 87.63 74.9299 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10k"
+			(at 87.63 77.4699 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
+			(at 86.106 76.454 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 85.09 76.2 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, US symbol"
+			(at 85.09 76.2 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "a89b9d4a-8ef4-44eb-8d91-289c2d42c331")
+		)
+		(pin "2"
+			(uuid "766f8f49-1543-485d-aeda-1c03fda504bc")
+		)
+		(instances
+			(project "pedal-counter"
+				(path "/97db42fc-d935-4d5d-82a6-1327e6a1cdb5"
+					(reference "R7")
 					(unit 1)
 				)
 			)
