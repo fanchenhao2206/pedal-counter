@@ -31,6 +31,7 @@ typedef struct _button {
     int startMillis; // Time button was pressed down; to count how long have been pressed down
     int heldMillis; // How long button has been pressed down; updated on each loop
     char display[10]; // The 10 characters to show on each second held down; repeat 10th after 10s
+    bool polarity; // For just pedal; true if postiive polarity (increase), false if negative (decrease)
 } button;
 
 typedef const uint8_t *font_t;
@@ -56,8 +57,8 @@ button mode = {
 
 button inc = {
     .pin = 33, // GPIO_33,
-    .display = { '+', '>', '=', '=', '=', '=', '=', '=', '=', '=' }
-    // On second  1 ,  1 ,  1 ,  1 ,  1 ,  1 ,  1 ,  1 ,  1 ,  1
+    .display = { '+', '>', '.', '=', '=', '=', '=', '=', '=', '=' }
+    // On second  1 ,  1 ,  0 ,  1 ,  1 ,  1 ,  1 ,  1 ,  1 ,  1
     // 1 if do something, 0 if do nothing, when let go of button at this time
     // So, increase count by holding button for 1 second or less
     // And, goto next lap if one exists when hold for more than 1 second
@@ -65,8 +66,8 @@ button inc = {
 
 button dec = {
     .pin = 15, // GPIO_15
-    .display = { '-', '<', '=', '=', '=', '=', '=', '=', '=', '=' }
-    // On second  1 ,  1 ,  1 ,  1 ,  1 ,  1 ,  1 ,  1 ,  1 ,  1
+    .display = { '-', '<', '.', '=', '=', '=', '=', '=', '=', '=' }
+    // On second  1 ,  1 ,  0 ,  1 ,  1 ,  1 ,  1 ,  1 ,  1 ,  1
     // 1 if do something, 0 if do nothing, when let go of button at this time
     // So, decrease count by holding button for 1 second or less
     // And, goto prev lap if one exists when hold for more than 1 second
@@ -86,7 +87,7 @@ button lap = {
 
 button pedal = {
     .pin = 14, // GPIO_14
-    .display = { '+', '+', '+', '+', '+', '+', '+', '+', '+', '+' }
+    .polarity = true // Default behaviour is press pedal increase count; set to false for decrease
     // On second  1 ,  1 ,  1 ,  1 ,  1 ,  1 ,  1 ,  1 ,  1 ,  1
     // 1 if do something, 0 if do nothing, when let go of button at this time
     // So, increase count by holding button for more than 0 seconds
@@ -223,12 +224,12 @@ void printStat(int y, font_t font, EFontStyle style, EFontSize size)
     char text[16];
 
     if (inc.curr) snprintf(text, sizeof(text), "%c", inc.display[inc.heldMillis / 1000]);
-    else if (pedal.curr) snprintf(text, sizeof(text), "%c", pedal.display[pedal.heldMillis / 1000]);
     else if (dec.curr) snprintf(text, sizeof(text), "%c", dec.display[dec.heldMillis / 1000]);
     else if (mode.curr) snprintf(text, sizeof(text), "%c", mode.display[mode.heldMillis / 1000]);
     else if (lap.curr) snprintf(text, sizeof(text), "%c", lap.display[lap.heldMillis / 1000]);
 
-    else snprintf(text, sizeof(text), " ");
+    // Constantly display pedal's polarity (unless other button is being pressed)
+    else snprintf(text, sizeof(text), pedal.polarity ? "+" : "-");
 
     // Print it, in middle of row given by y
     int x, font_w, font_h;
@@ -275,36 +276,42 @@ void loop()
     }
     if (!inc.curr && inc.prev) {
         if (inc.heldMillis <= 1000) {
-            // Increase count in current lap based on selected mode
-            counts[lap.val] += modes[mode.val];
+            // Change pedal to increase mode
+            pedal.polarity = true;
         } else if (inc.heldMillis <= 2000) {
             // Goto next lap
             lap.val += 1;
             if (lap.val > lap.total) lap.val = lap.total;
             refresh = true;
-        } else {
+        } else if (inc.heldMillis >= 3000) {
             // Goto last lap
             lap.val = lap.total;
             refresh = true;
         }
     }
     if (!pedal.curr && pedal.prev) {
-        // Increase count in current lap based on selected mode
-        counts[lap.val] += modes[mode.val];
+        // Either increase or decrease count, based on selected mode
+        if (pedal.polarity) {
+            counts[lap.val] += modes[mode.val];
+        } else {
+            counts[lap.val] -= modes[mode.val];
+            refresh = true;
+        }
     }
     if (!dec.curr && dec.prev) {
         if (dec.heldMillis <= 1000) {
-            // Decrease count in current lap based on selected mode
-            counts[lap.val] -= modes[mode.val];
+            // Change pedal to decrease mode
+            pedal.polarity = false;
         } else if (dec.heldMillis <= 2000) {
             // Goto previous lap
             lap.val -= 1;
             if (lap.val < 1) lap.val = 1;
-        } else {
+            refresh = true;
+        } else if (dec.heldMillis >= 3000) {
             // Goto first lap
             lap.val = 1;
+            refresh = true;
         }
-        refresh = true;
     }
     if (!lap.curr && lap.prev) {
         if (lap.heldMillis <= 1000) {
@@ -312,6 +319,8 @@ void loop()
             // currently on the last lap in project
             if (lap.total < MAX_LAP) {
                 if (lap.val == lap.total) lap.val += 1;
+                // Set count of new lap to zero
+                counts[lap.val] = 0;
                 lap.total += 1;
             }
         } else if (lap.heldMillis >= 5000) {
